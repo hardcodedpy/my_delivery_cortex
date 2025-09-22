@@ -182,6 +182,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "http_methods",
+      "rootUri": "file:///home/darkbit/.pub-cache/hosted/pub.dev/http_methods-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "http_multi_server",
       "rootUri": "file:///home/darkbit/.pub-cache/hosted/pub.dev/http_multi_server-3.2.2",
       "packageUri": "lib/",
@@ -324,6 +330,12 @@
       "rootUri": "file:///home/darkbit/.pub-cache/hosted/pub.dev/shelf-1.4.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "shelf_router",
+      "rootUri": "file:///home/darkbit/.pub-cache/hosted/pub.dev/shelf_router-1.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "shelf_web_socket",
