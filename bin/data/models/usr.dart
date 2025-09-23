@@ -1,13 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class Usr {
+import 'package:hive/hive.dart';
+part 'usr.g.dart';
+
+@HiveType(typeId: 5)
+class Usr extends HiveObject {
+  @HiveField(0)
   String id;
+  @HiveField(1)
   String usr;
+  @HiveField(2)
   String psw;
+  @HiveField(3)
   String? name;
+  @HiveField(4)
   String? doc;
+  @HiveField(5)
   String? token;
+  @HiveField(6)
   int usrType;
   Usr({
     required this.id,

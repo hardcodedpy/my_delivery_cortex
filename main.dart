@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'bin/data/service/cli_service.dart';
+import 'bin/server.dart';
 
 void main(List<String> args) async {
+  await Server.start();
   print('Server running on http://localhost:8080');
 
   // ================= Loop CLI =================

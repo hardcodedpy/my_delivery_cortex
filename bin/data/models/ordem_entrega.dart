@@ -1,25 +1,51 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import './location.dart';
 
-class OrdemEntrega {
+import 'package:hive/hive.dart';
+
+part 'ordem_entrega.g.dart';
+
+@HiveType(typeId: 4)
+class OrdemEntrega extends HiveObject {
+  @HiveField(0)
   String id;
+  @HiveField(1)
   String localizador;
+  @HiveField(2)
   String idMotoBoy;
+  @HiveField(3)
   String idEstabelecimento;
+  @HiveField(4)
   double custoEntrega;
+  @HiveField(5)
   double custoCliente;
+  @HiveField(6)
   String cep;
+  @HiveField(7)
   String rua;
+  @HiveField(8)
   String nmr;
-  Location? deliveryLocation;
-  Location? ultimaLocMotoboy;
+  @HiveField(9)
+  double? deliveryLat;
+  @HiveField(10)
+  double? deliveryLong;
+  @HiveField(11)
   DateTime dthrCreated;
+  @HiveField(12)
   DateTime? dthrAccepted;
+  @HiveField(13)
   DateTime? dthrDelivered;
+  @HiveField(14)
   DateTime? dthrProblem;
+  @HiveField(15)
   DateTime? dthrCanceled;
+  @HiveField(16)
   String? observation;
+  @HiveField(17)
+  double? motoboyLat;
+  @HiveField(18)
+  double? motoboyLong;
+
   OrdemEntrega({
     required this.id,
     required this.localizador,
@@ -30,14 +56,16 @@ class OrdemEntrega {
     required this.cep,
     required this.rua,
     required this.nmr,
-    this.deliveryLocation,
-    this.ultimaLocMotoboy,
+    this.deliveryLat,
+    this.deliveryLong,
     required this.dthrCreated,
     this.dthrAccepted,
     this.dthrDelivered,
     this.dthrProblem,
     this.dthrCanceled,
     this.observation,
+    this.motoboyLat,
+    this.motoboyLong,
   });
 
   OrdemEntrega copyWith({
@@ -50,14 +78,16 @@ class OrdemEntrega {
     String? cep,
     String? rua,
     String? nmr,
-    Location? deliveryLocation,
-    Location? ultimaLocMotoboy,
+    double? deliveryLat,
+    double? deliveryLong,
     DateTime? dthrCreated,
     DateTime? dthrAccepted,
     DateTime? dthrDelivered,
     DateTime? dthrProblem,
     DateTime? dthrCanceled,
     String? observation,
+    double? motoboyLat,
+    double? motoboyLong,
   }) {
     return OrdemEntrega(
       id: id ?? this.id,
@@ -69,14 +99,16 @@ class OrdemEntrega {
       cep: cep ?? this.cep,
       rua: rua ?? this.rua,
       nmr: nmr ?? this.nmr,
-      deliveryLocation: deliveryLocation ?? this.deliveryLocation,
-      ultimaLocMotoboy: ultimaLocMotoboy ?? this.ultimaLocMotoboy,
+      deliveryLat: deliveryLat ?? this.deliveryLat,
+      deliveryLong: deliveryLong ?? this.deliveryLong,
       dthrCreated: dthrCreated ?? this.dthrCreated,
       dthrAccepted: dthrAccepted ?? this.dthrAccepted,
       dthrDelivered: dthrDelivered ?? this.dthrDelivered,
       dthrProblem: dthrProblem ?? this.dthrProblem,
       dthrCanceled: dthrCanceled ?? this.dthrCanceled,
       observation: observation ?? this.observation,
+      motoboyLat: motoboyLat ?? this.motoboyLat,
+      motoboyLong: motoboyLong ?? this.motoboyLong,
     );
   }
 
@@ -91,14 +123,16 @@ class OrdemEntrega {
       'cep': cep,
       'rua': rua,
       'nmr': nmr,
-      'deliveryLocation': deliveryLocation?.toMap(),
-      'ultimaLocMotoboy': ultimaLocMotoboy?.toMap(),
+      'deliveryLat': deliveryLat,
+      'deliveryLong': deliveryLong,
       'dthrCreated': dthrCreated.millisecondsSinceEpoch,
       'dthrAccepted': dthrAccepted?.millisecondsSinceEpoch,
       'dthrDelivered': dthrDelivered?.millisecondsSinceEpoch,
       'dthrProblem': dthrProblem?.millisecondsSinceEpoch,
       'dthrCanceled': dthrCanceled?.millisecondsSinceEpoch,
       'observation': observation,
+      'motoboyLat': motoboyLat,
+      'motoboyLong': motoboyLong,
     };
   }
 
@@ -113,12 +147,10 @@ class OrdemEntrega {
       cep: map['cep'] as String,
       rua: map['rua'] as String,
       nmr: map['nmr'] as String,
-      deliveryLocation: map['deliveryLocation'] != null
-          ? Location.fromMap(map['deliveryLocation'] as Map<String, dynamic>)
-          : null,
-      ultimaLocMotoboy: map['ultimaLocMotoboy'] != null
-          ? Location.fromMap(map['ultimaLocMotoboy'] as Map<String, dynamic>)
-          : null,
+      deliveryLat:
+          map['deliveryLat'] != null ? map['deliveryLat'] as double : null,
+      deliveryLong:
+          map['deliveryLong'] != null ? map['deliveryLong'] as double : null,
       dthrCreated:
           DateTime.fromMillisecondsSinceEpoch(map['dthrCreated'] as int),
       dthrAccepted: map['dthrAccepted'] != null
@@ -135,6 +167,10 @@ class OrdemEntrega {
           : null,
       observation:
           map['observation'] != null ? map['observation'] as String : null,
+      motoboyLat:
+          map['motoboyLat'] != null ? map['motoboyLat'] as double : null,
+      motoboyLong:
+          map['motoboyLong'] != null ? map['motoboyLong'] as double : null,
     );
   }
 
@@ -145,7 +181,7 @@ class OrdemEntrega {
 
   @override
   String toString() {
-    return 'OrdemEntrega(id: $id, localizador: $localizador, idMotoBoy: $idMotoBoy, idEstabelecimento: $idEstabelecimento, custoEntrega: $custoEntrega, custoCliente: $custoCliente, cep: $cep, rua: $rua, nmr: $nmr, deliveryLocation: $deliveryLocation, ultimaLocMotoboy: $ultimaLocMotoboy, dthrCreated: $dthrCreated, dthrAccepted: $dthrAccepted, dthrDelivered: $dthrDelivered, dthrProblem: $dthrProblem, dthrCanceled: $dthrCanceled, observation: $observation)';
+    return 'OrdemEntrega(id: $id, localizador: $localizador, idMotoBoy: $idMotoBoy, idEstabelecimento: $idEstabelecimento, custoEntrega: $custoEntrega, custoCliente: $custoCliente, cep: $cep, rua: $rua, nmr: $nmr, deliveryLat: $deliveryLat, deliveryLong: $deliveryLong, dthrCreated: $dthrCreated, dthrAccepted: $dthrAccepted, dthrDelivered: $dthrDelivered, dthrProblem: $dthrProblem, dthrCanceled: $dthrCanceled, observation: $observation, motoboyLat: $motoboyLat, motoboyLong: $motoboyLong)';
   }
 
   @override
@@ -161,14 +197,16 @@ class OrdemEntrega {
         other.cep == cep &&
         other.rua == rua &&
         other.nmr == nmr &&
-        other.deliveryLocation == deliveryLocation &&
-        other.ultimaLocMotoboy == ultimaLocMotoboy &&
+        other.deliveryLat == deliveryLat &&
+        other.deliveryLong == deliveryLong &&
         other.dthrCreated == dthrCreated &&
         other.dthrAccepted == dthrAccepted &&
         other.dthrDelivered == dthrDelivered &&
         other.dthrProblem == dthrProblem &&
         other.dthrCanceled == dthrCanceled &&
-        other.observation == observation;
+        other.observation == observation &&
+        other.motoboyLat == motoboyLat &&
+        other.motoboyLong == motoboyLong;
   }
 
   @override
@@ -182,13 +220,15 @@ class OrdemEntrega {
         cep.hashCode ^
         rua.hashCode ^
         nmr.hashCode ^
-        deliveryLocation.hashCode ^
-        ultimaLocMotoboy.hashCode ^
+        deliveryLat.hashCode ^
+        deliveryLong.hashCode ^
         dthrCreated.hashCode ^
         dthrAccepted.hashCode ^
         dthrDelivered.hashCode ^
         dthrProblem.hashCode ^
         dthrCanceled.hashCode ^
-        observation.hashCode;
+        observation.hashCode ^
+        motoboyLat.hashCode ^
+        motoboyLong.hashCode;
   }
 }
