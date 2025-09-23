@@ -1,14 +1,18 @@
 import 'dart:io';
 import 'package:args/args.dart';
 
+import '../../services/auth_service.dart';
+import '../models/usr.dart';
+import '../../core/utils.dart';
+
 class CliService {
+  AuthService authService;
+
+  CliService({required this.authService});
   final ArgParser parser = ArgParser()
-    ..addCommand('start')
-    ..addCommand('stop')
-    ..addCommand('add')
-    ..addCommand('status')
-    ..addCommand('logs')
-    ..addCommand('reset-db');
+    ..addCommand('add-usr')
+    ..addCommand('login')
+    ..addCommand('check-auth');
 
   Future<void> run(List<String> args) async {
     if (args.isEmpty) {
@@ -19,81 +23,82 @@ class CliService {
     final command = args.first;
 
     switch (command) {
-      case 'add':
-        await _addData();
+      case 'add-usr':
+        await _addUsr();
         break;
-      case 'start':
-        await _startServer();
+      case 'login':
+        await _login();
         break;
-      case 'stop':
-        _stopServer();
-        break;
-      case 'status':
-        _statusServer();
-        break;
-      case 'logs':
-        await _showLogs();
-        break;
-      case 'reset-db':
-        await _resetDb();
+      case 'check-auth':
+        await _checkAuth();
         break;
       default:
         print('Unknown command: $command');
-        _printUsage();
         break;
+    }
+    stdout.write('\n...');
+    final wait = stdin.readLineSync()?.trim() ?? '';
+    stdout.write('\x1B[2J\x1B[0;0H');
+  }
+
+  Future<void> _addUsr() async {
+    print('Adding new usr to server...\n');
+
+    stdout.write('Enter usr: ');
+    final usr = stdin.readLineSync()?.trim() ?? '';
+
+    stdout.write('Enter psw: ');
+    final psw = stdin.readLineSync()?.trim() ?? '';
+
+    stdout.write('Enter a type:\n1 - ADM\n 2 - MOTOBOY\n3 - OWNER\n: ');
+    final type = stdin.readLineSync()?.trim() ?? '';
+
+    try {
+      await AuthService.createUsr(Usr(
+          id: Utils.generateRandomString(12),
+          usr: usr,
+          psw: psw,
+          usrType: int.tryParse(type) ?? 0));
+      print('SUCESS');
+    } catch (err) {
+      print(err.toString());
     }
   }
 
-  Future<void> _addData() async {
-    print('Adding new data to server...\n');
+  Future<void> _login() async {
+    print('Login to server...\n');
 
-    stdout.write('Enter your name: ');
-    final name = stdin.readLineSync()?.trim() ?? '';
+    stdout.write('Enter usr: ');
+    final usr = stdin.readLineSync()?.trim() ?? '';
 
-    stdout.write('Enter your email: ');
-    final email = stdin.readLineSync()?.trim() ?? '';
+    stdout.write('Enter psw: ');
+    final psw = stdin.readLineSync()?.trim() ?? '';
 
-    stdout.write('Enter a message: ');
-    final message = stdin.readLineSync()?.trim() ?? '';
+    try {
+      final l = await AuthService.login(usr, psw);
+      print('SUCESS \n$l');
+    } catch (err) {
+      print(err.toString());
+    }
+  }
 
-    print('SUCESS');
+  Future<void> _checkAuth() async {
+    print('Checking Auth to server...\n');
+
+    stdout.write('Enter token: \n');
+    final token = stdin.readLineSync()?.trim() ?? '';
+
+    try {
+      final l = await AuthService.getUsrByToken(token);
+      print('SUCESS \n${l.usr}\n${l.psw}');
+    } catch (err) {
+      print(err.toString());
+    }
   }
 
   void _printUsage() {
     print('Usage: dart cli.dart <command>');
     print(parser.usage);
-  }
-
-  Future<void> _startServer() async {
-    print('Starting server...');
-    // await server.startServer();
-  }
-
-  void _stopServer() {
-    print('Stopping server...');
-    print('Server must be terminated manually (Ctrl+C or kill)');
-  }
-
-  void _statusServer() {
-    print('Check server status using: ps aux | grep dart');
-  }
-
-  Future<void> _showLogs() async {
-    final logFile = File('logs/app.log');
-    if (await logFile.exists()) {
-      print(await logFile.readAsString());
-    } else {
-      print('No log file found.');
-    }
-  }
-
-  Future<void> _resetDb() async {
-    final hiveDir = Directory('hive_data');
-    if (await hiveDir.exists()) {
-      await hiveDir.delete(recursive: true);
-      print('Hive database cleared.');
-    } else {
-      print('No Hive database found.');
-    }
+    exit(0);
   }
 }

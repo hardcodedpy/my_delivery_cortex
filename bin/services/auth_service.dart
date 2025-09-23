@@ -12,6 +12,21 @@ class AuthService {
     return _instance;
   }
 
+  static Future createUsr(Usr usr) async {
+    try {
+      Usr? u = await HiveService.getUsrById(usr.id);
+      if (u != null) {
+        throw UsrAlreadyExist();
+      } else {
+        await HiveService.addUsr(usr);
+      }
+    } on AuthException {
+      rethrow;
+    } catch (err, sT) {
+      throw GenAuthErr(err.toString() + sT.toString());
+    }
+  }
+
   static Future updateUsr(Usr usr) async {
     try {
       Usr? u = await HiveService.getUsrById(usr.id);
@@ -22,8 +37,8 @@ class AuthService {
       }
     } on AuthException {
       rethrow;
-    } catch (err) {
-      throw GenAuthErr();
+    } catch (err, sT) {
+      throw GenAuthErr(err.toString() + sT.toString());
     }
   }
 
@@ -43,8 +58,8 @@ class AuthService {
       }
     } on AuthException {
       rethrow;
-    } catch (err) {
-      throw GenAuthErr();
+    } catch (err, sT) {
+      throw GenAuthErr(err.toString() + sT.toString());
     }
   }
 
@@ -58,8 +73,8 @@ class AuthService {
       }
     } on AuthException {
       rethrow;
-    } catch (err) {
-      throw GenAuthErr();
+    } catch (err, sT) {
+      throw GenAuthErr(err.toString() + sT.toString());
     }
   }
 }

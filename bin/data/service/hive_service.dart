@@ -49,7 +49,12 @@ class HiveService {
   }
 
   static Future updateUsr(Usr u) async {
-    _instance.usrBox!.put(u.key, u);
+    dynamic k = u.key;
+    if (k == null) {
+      Usr _u = (await getUsrById(u.id))!;
+      k = _u.key;
+    }
+    await _instance.usrBox!.put(k, u);
   }
 
   static Future<Usr?> getUsrById(String id) async {
