@@ -1,4 +1,8 @@
+import 'dart:io';
+
 abstract class AuthException implements Exception {}
+
+abstract class ApiException implements Exception {}
 
 class UsrNotFind extends AuthException {}
 
@@ -19,5 +23,14 @@ class GenAuthErr extends AuthException {
   @override
   String toString() {
     return s;
+  }
+}
+
+class BodyIsNotJson extends ApiException {
+  String s;
+  BodyIsNotJson(this.s);
+  @override
+  String toString() {
+    return 'incorrect body type: \n$s\n';
   }
 }

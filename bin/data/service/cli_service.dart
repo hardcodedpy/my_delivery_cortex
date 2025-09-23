@@ -4,12 +4,17 @@ import 'package:args/args.dart';
 import '../../services/auth_service.dart';
 import '../models/usr.dart';
 import '../../core/utils.dart';
+import 'api_server.dart';
 
 class CliService {
   AuthService authService;
 
-  CliService({required this.authService});
+  CliService({
+    required this.authService,
+  });
   final ArgParser parser = ArgParser()
+    ..addCommand('start-sv')
+    ..addCommand('stop-sv')
     ..addCommand('add-usr')
     ..addCommand('login')
     ..addCommand('check-auth');
@@ -23,6 +28,12 @@ class CliService {
     final command = args.first;
 
     switch (command) {
+      case 'stop-sv':
+        await ApiServer.stopServer();
+        break;
+      case 'start-sv':
+        await ApiServer.startServer();
+        break;
       case 'add-usr':
         await _addUsr();
         break;
