@@ -42,7 +42,7 @@ class AuthService {
     }
   }
 
-  static Future<TOKEN> login(String usr, String psw) async {
+  static Future<Usr> login(String usr, String psw) async {
     try {
       Usr? u = await HiveService.getUsrByUsr(usr);
       if (u == null) {
@@ -51,7 +51,7 @@ class AuthService {
         if (u.psw == psw) {
           TOKEN token = Utils.generateRandomString(12);
           await HiveService.updateUsr(u.copyWith(token: token));
-          return token;
+          return (await HiveService.getUsrByUsr(usr))!;
         } else {
           throw IncorrectPassword();
         }

@@ -6,6 +6,7 @@ import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_router/shelf_router.dart';
 import '../../core/exceptions.dart';
 import '../../services/auth_service.dart';
+import '../models/usr.dart';
 
 typedef JSON = Map<String, dynamic>;
 
@@ -39,9 +40,9 @@ class ApiServer {
     router.post('/login', (Request req) async {
       try {
         JSON j = await decodeBody(req);
-        TOKEN t = await AuthService.login(j['usr'], j['psw']);
+        Usr t = await AuthService.login(j['usr'], j['psw']);
         return Response.ok(
-          jsonEncode({'token': t}),
+          jsonEncode({'token': t, 'usr_type': t.usrType}),
           headers: {'Content-Type': 'application/json'},
         );
       } catch (err) {
